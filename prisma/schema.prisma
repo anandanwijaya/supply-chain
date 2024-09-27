@@ -14,11 +14,11 @@ datasource db {
 }
 
 model User {
-  user_id    Int     @id
+  user_id    Int     @id @default(autoincrement())
   username   String  @unique
   email      String
   password   String
-  role       Role
+  role       Role     @default(STAKEHOLDER)
   created_at DateTime @default(now())
   token      String?
 
@@ -32,7 +32,7 @@ enum Role {
 }
 
 model Supplier {
-  supplier_id Int     @id
+  supplier_id Int     @id @default(autoincrement())
   user_id     Int     @unique
   username    String  @unique
   address     String
@@ -44,8 +44,8 @@ model Order {
   order_id      Int          @id @default(autoincrement())
   supplier_id   Int
   stakeholder_id Int
-  status        StatusOrder
-  quantity      Int
+  status        StatusOrder  @default(PENDING)
+  quantity      Int 
   created_at    DateTime     @default(now())
   updated_at    DateTime?  
 
@@ -61,10 +61,9 @@ enum StatusOrder {
 }
 
 model Label {
-  label_id    Int     @id     
-  order_id    Int @unique
+  label_id    Int     @id 
   description String
   qr_code     String
 
-  Orders      Order @relation(fields: [order_id], references: [order_id])
+  Orders      Order @relation(fields: [label_id], references: [order_id])
 }
