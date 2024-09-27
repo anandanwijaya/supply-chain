@@ -41,16 +41,14 @@ model Supplier {
 }
 
 model Order {
-  order_id      Int          @id @default(autoincrement())
-  supplier_id   Int
-  stakeholder_id Int
+  order_id      Int          @id
   status        StatusOrder  @default(PENDING)
   quantity      Int 
   created_at    DateTime     @default(now())
   updated_at    DateTime?  
 
   Label Label?
-  User          User         @relation(fields: [stakeholder_id], references: [user_id])
+  User          User         @relation(fields: [order_id], references: [user_id])
 }
 
 enum StatusOrder {
