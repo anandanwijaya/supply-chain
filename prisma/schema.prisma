@@ -33,7 +33,7 @@ enum Role {
 
 model Supplier {
   supplier_id Int     @id @default(autoincrement())
-  user_id     Int     @unique
+  user_id     Int     
   username    String  @unique
   address     String
 
