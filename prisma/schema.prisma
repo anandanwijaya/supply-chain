@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  user_id    Int     @id
+  username   String  @unique
+  email      String
+  password   String
+  role       Role
+  created_at DateTime @default(now())
+  token      String?
+
+  supplier   Supplier[]
+  Orders     Order[]
+}
+
+enum Role {
+  STAKEHOLDER
+  SUPPLIER
+}
+
+model Supplier {
+  supplier_id Int     @id
+  user_id     Int     @unique
+  username    String  @unique
+  address     String
+
+  User        User     @relation(fields: [user_id], references: [user_id])
+}
+
+model Order {
+  order_id      Int          @id @default(autoincrement())
+  supplier_id   Int
+  stakeholder_id Int
+  status        StatusOrder
+  quantity      Int
+  created_at    DateTime     @default(now())
+  updated_at    DateTime?  
+
+  Label Label?
+  User          User         @relation(fields: [stakeholder_id], references: [user_id])
+}
+
+enum StatusOrder {
+  PENDING
+  REJECT
+  ON_PROCESS
+  DONE
+}
+
+model Label {
+  label_id    Int     @id     
+  order_id    Int @unique
+  description String
+  qr_code     String
+
+  Orders      Order @relation(fields: [order_id], references: [order_id])
+}
