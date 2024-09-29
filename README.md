@@ -20,7 +20,7 @@ npm i express bcrypt dotenv jsontoken prisma @prisma/client
 
 Setelah selesai, anda juga harus menginstal package nodemon untuk menjalankan server secara otomatis, namun hanya digunakan dalam lingkungan production. Dengan perintah:
 ```
-npm i nademon —save-dev
+npm i nodemon —save-dev
 ```
 
 Lalu setelah terinstall semua, anda perlu menjalankan prisma menggunakan perintah:
