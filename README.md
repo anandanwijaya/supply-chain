@@ -1,6 +1,6 @@
 # supply-chain
 
-Usage
+<h1>Usage</h1>
 
 Silahkan melakukan clone pada repositori github di atas. Namun harus dipastikan bahwa folder tempat anda menyimpan clone repositori telah di inisiasi dengan git melalui perintah:
 
