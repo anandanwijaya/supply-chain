@@ -16,7 +16,7 @@ datasource db {
 model User {
   user_id    Int     @id @default(autoincrement())
   username   String  @unique
-  email      String
+  email      String  @unique
   password   String
   role       Role     @default(STAKEHOLDER)
   created_at DateTime @default(now())
@@ -46,7 +46,7 @@ model Order {
   status        StatusOrder  @default(PENDING)
   quantity      Int 
   created_at    DateTime     @default(now())
-  updated_at    DateTime?  
+  updated_at    DateTime?
 
   Label Label?
   User          User         @relation(fields: [user_id], references: [user_id])

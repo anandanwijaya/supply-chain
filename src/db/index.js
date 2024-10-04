@@ -1,5 +1,5 @@
-let { prismaClient } = require('@prisma/client')
+let { PrismaClient } = require('@prisma/client')
 
-let prisma = new prismaClient()
+let prisma = new PrismaClient()
 
 module.exports = prisma
