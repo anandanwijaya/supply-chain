@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,14 +8,15 @@ datasource db {
 }
 
 model User {
-  user_id    Int     @id @default(autoincrement())
-  username   String  @unique
-  email      String  @unique
-  password   String
-  role       Role     @default(STAKEHOLDER)
-  created_at DateTime @default(now())
-  supplier   Supplier[]
-  Orders     Order[]
+  user_id     Int     @id @default(autoincrement())
+  username    String  @unique
+  email       String  @unique
+  password    String
+  role        Role     @default(STAKEHOLDER)
+  created_at  DateTime @default(now())
+  
+  Master_Data Master_Data[]
+  Orders      Order[]
 }
 
 enum Role {
@@ -29,24 +24,36 @@ enum Role {
   SUPPLIER
 }
 
-model Supplier {
-  supplier_id Int     @id @default(autoincrement())
-  user_id     Int     
-  username    String  @unique
-  address     String
+model Master_Data {
+  product_id    Int          @id @default(autoincrement())
+  product_name  String
+  price         Int
+  user_id       Int
 
-  User        User     @relation(fields: [user_id], references: [user_id])
+  User          User         @relation(fields: [user_id], references: [user_id])
+  Quantity Quantity[]
+  Order Order[]
 }
+
+model Quantity {
+  number_of_product   Int
+  product_id          Int           @id
+
+  Master_Data         Master_Data   @relation(fields: [product_id], references: [product_id])       
+}
+
 
 model Order {
   order_id      Int          @id @default(autoincrement())
+  product_id    Int          
   user_id       Int         
   status        StatusOrder  @default(PENDING)
-  quantity      Int 
+  quantity      Int
   created_at    DateTime     @default(now())
   updated_at    DateTime?
 
   Label Label?
+  Master_Data   Master_Data  @relation(fields: [product_id], references: [product_id])
   User          User         @relation(fields: [user_id], references: [user_id])
 }
 
@@ -62,5 +69,5 @@ model Label {
   description String
   qr_code     String
 
-  Orders      Order @relation(fields: [label_id], references: [order_id])
+  Order      Order @relation(fields: [label_id], references: [order_id])
 }

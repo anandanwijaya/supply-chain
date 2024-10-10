@@ -5,9 +5,15 @@ dotenv.config()
 let port = process.env.PORT
 
 let authController = require('./auth/auth.controller')
+let productController = require('./product/product.controller')
+let userController = require('./user/user.controller')
+let orderController = require('./order/order.controller')
 
 app.use(express.json())
 app.use('/api/auth', authController)
+app.use('/api/products', productController)
+app.use('/api/users', userController)
+app.use('/api/orders', orderController)
 
 app.get("/", (req, res) => {
     res.send("Hello World!")
