@@ -87,23 +87,25 @@ async function deleteProduct(product_id) {
     })
 }
 
-// async function updateProductQuantity(product_id, newQuantity) {
-//     await prisma.quantity.update({
-//         where: {
-//             product_id: parseInt(product_id)
-//         },
-//         data: {
-//             number_of_product: parseInt(newQuantity)
-//         }
-//     })
-// }
+async function findQuantityById(product_id) {
+    let quantity =  await prisma.quantity.findUnique({
+        where: {
+            product_id: parseInt(product_id)
+        }
+    })
+    return quantity
+}
 
-// async function findQuantityById(product_id) {
-//     await prisma.quantity.findUnique({
-//         where: {
-//             product_id: parseInt(product_id)
-//         }
-//     })
-// }
+async function updateProductQuantity(product_id, newQuantity) {
+    await prisma.quantity.update({
+        where: {
+            product_id: parseInt(product_id)
+        },
+        data: {
+            number_of_product: parseInt(newQuantity)
+        }
+    })
+}
 
-module.exports = {insertProduct, findProducts, findProductById, editProduct, deleteProduct, /* updateProductQuantity, findQuantityById */}
+
+module.exports = {insertProduct, findProducts, findProductById, editProduct, deleteProduct, updateProductQuantity, findQuantityById}

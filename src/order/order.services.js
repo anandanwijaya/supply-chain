@@ -22,45 +22,45 @@ async function getOrdersById(order_id) {
     return order
 }
 
-// async function verifyOrder(order_id, status) {
-//     let order = await orderRepository.findOrderById(order_id)
-//     if(!order){
-//         throw new Error('Order not found')
-//     }
+async function verifyOrder(order_id, status) {
+    let order = await orderRepository.findOrderById(order_id)
+    if(!order){
+        throw new Error('Order not found')
+    }
 
-//     await orderRepository.updateOrderStatus(order_id, status, status === 'ON_PROCESS' ? 'updated_at' : null)
+    await orderRepository.updateOrderStatus(order_id, status, status === 'ON_PROCESS' ? 'updated_at' : null)
 
-//     if(status === 'ON_PROCESS'){
-//         let product = await productRepository.findProductById(order.product_id)
-//         if(!product){
-//             throw new Error('Product not found')
-//         }
-//         let quantity = await productRepository.findQuantityById(order.product_id)
-//         let newQuantity = quantity.number_of_product - order.quantity
-//         if(newQuantity < 0){
-//             throw new Error('Insuficient quantity')
-//         }
+    if(status === 'ON_PROCESS'){
+        let product = await productRepository.findProductById(order.product_id)
+        if(!product){
+            throw new Error('Product not found')
+        }
+        let quantity = await productRepository.findQuantityById(order.product_id)
+        let newQuantity = quantity.number_of_product - order.quantity
+        if(newQuantity < 0){
+            throw new Error('Insuficient quantity')
+        }
 
-//         await productRepository.updateProductQuantity(quantity.product_id, newQuantity)
-//     }
-// }
+        await productRepository.updateProductQuantity(quantity.product_id, newQuantity)
+    }
+}
 
-// async function returnProduct(order_id) {
-//     let order = await orderRepository.findOrderById(order_id)
+async function returnProduct(order_id) {
+    let order = await orderRepository.findOrderById(order_id)
     
-//     if(!order){
-//         throw new Error('Order not found')
-//     }
-//     if(order.status !== 'ON_PROCESS'){
-//         throw new Error('Cannot return product. Order status is not On Process')
-//     }
+    if(!order){
+        throw new Error('Order not found')
+    }
+    if(order.status !== 'ON_PROCESS'){
+        throw new Error('Cannot return product. Order status is not On Process')
+    }
 
-//     await orderRepository.updateOrderStatus(order_id, 'REJECTED', 'updated_at')
+    await orderRepository.updateOrderStatus(order_id, 'REJECT', 'updated_at')
 
-//     let quantity = await productRepository.findQuantityById(order.product_id)
-//     let newQuantity = quantity.quantity + order.quantityBorrowed
-//     await productRepository.updateProductQuantity(quantity.product_id, newQuantity)
-// }
+    let quantity = await productRepository.findQuantityById(order.product_id)
+    let newQuantity = quantity.number_of_product + order.quantity
+    await productRepository.updateProductQuantity(quantity.product_id, newQuantity)
+}
 
 
-module.exports = {createOrder, getAllOrders, getOrdersByUserId, getOrdersById, /* verifyOrder, returnProduct */}
+module.exports = {createOrder, getAllOrders, getOrdersByUserId, getOrdersById, verifyOrder, returnProduct}
