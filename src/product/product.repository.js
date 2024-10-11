@@ -11,7 +11,7 @@ async function insertProduct(productData) {
     })
     let newQuantity = await prisma.quantity.create({
         data: {
-            number_of_product: productData.quantity,
+            quantity_of_product: productData.quantity,
             product_id: parseInt(newProduct.product_id)
         }
     })
@@ -24,7 +24,7 @@ async function findProducts() {
         include: {
             Quantity: {
                 select: {
-                    number_of_product: true
+                    quantity_of_product: true
                 }
             }
         }
@@ -41,7 +41,7 @@ async function findProductById(product_id) {
         include: {
             Quantity: {
                 select: {
-                    number_of_product: true
+                    quantity_of_product: true
                 }
             }
         }
@@ -67,7 +67,7 @@ async function editProduct(product_id, productData) {
             product_id: parseInt(product_id)
         },
         data: {
-            number_of_product: productData.quantity
+            quantity_of_product: productData.quantity
         }
     })
     return updatedProduct
@@ -102,7 +102,7 @@ async function updateProductQuantity(product_id, newQuantity) {
             product_id: parseInt(product_id)
         },
         data: {
-            number_of_product: parseInt(newQuantity)
+            quantity_of_product: parseInt(newQuantity)
         }
     })
 }

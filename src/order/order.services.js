@@ -36,7 +36,7 @@ async function verifyOrder(order_id, status) {
             throw new Error('Product not found')
         }
         let quantity = await productRepository.findQuantityById(order.product_id)
-        let newQuantity = quantity.number_of_product - order.quantity
+        let newQuantity = quantity.quantity_of_product - order.quantity
         if(newQuantity < 0){
             throw new Error('Insuficient quantity')
         }
@@ -45,22 +45,22 @@ async function verifyOrder(order_id, status) {
     }
 }
 
-async function returnProduct(order_id) {
+async function rejectOrder(order_id) {
     let order = await orderRepository.findOrderById(order_id)
     
     if(!order){
         throw new Error('Order not found')
     }
     if(order.status !== 'ON_PROCESS'){
-        throw new Error('Cannot return product. Order status is not On Process')
+        throw new Error('Cannot reject order. Order status is not On Process')
     }
 
     await orderRepository.updateOrderStatus(order_id, 'REJECT', 'updated_at')
 
     let quantity = await productRepository.findQuantityById(order.product_id)
-    let newQuantity = quantity.number_of_product + order.quantity
+    let newQuantity = quantity.quantity_of_product + order.quantity
     await productRepository.updateProductQuantity(quantity.product_id, newQuantity)
 }
 
 
-module.exports = {createOrder, getAllOrders, getOrdersByUserId, getOrdersById, verifyOrder, returnProduct}
+module.exports = {createOrder, getAllOrders, getOrdersByUserId, getOrdersById, verifyOrder, rejectOrder}

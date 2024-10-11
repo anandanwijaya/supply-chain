@@ -59,8 +59,8 @@ router.post('/return/:order_id', async(req, res) => {
             return res.status(403).json({message: 'Unauthorized'})
         }
  
-        await orderServices.returnProduct(order_id)
-        res.status(200).json({message: 'Product returned'})
+        await orderServices.rejectOrder(order_id)
+        res.status(200).json({message: 'Product Rejected'})
     } catch (error) {
         res.status(400).send(error.message)
     }

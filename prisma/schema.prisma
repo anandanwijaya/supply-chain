@@ -36,10 +36,11 @@ model Master_Data {
 }
 
 model Quantity {
-  number_of_product   Int
-  product_id          Int           @id
+  quantity_id           Int           @id @default(autoincrement())
+  quantity_of_product   Int           
+  product_id            Int           @unique
 
-  Master_Data         Master_Data   @relation(fields: [product_id], references: [product_id])       
+  Master_Data           Master_Data   @relation(fields: [product_id], references: [product_id])       
 }
 
 
@@ -52,7 +53,7 @@ model Order {
   created_at    DateTime     @default(now())
   updated_at    DateTime?
 
-  Label Label?
+  Label Label[]
   Master_Data   Master_Data  @relation(fields: [product_id], references: [product_id])
   User          User         @relation(fields: [user_id], references: [user_id])
 }
@@ -65,9 +66,10 @@ enum StatusOrder {
 }
 
 model Label {
-  label_id    Int     @id 
+  label_id    Int     @id @default(autoincrement())
+  order_id    Int
   description String
   qr_code     String
 
-  Order      Order @relation(fields: [label_id], references: [order_id])
+  Order      Order @relation(fields: [order_id], references: [order_id])
 }
