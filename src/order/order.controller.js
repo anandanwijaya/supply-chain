@@ -60,7 +60,7 @@ router.post('/return/:order_id', async(req, res) => {
         }
  
         await orderServices.rejectOrder(order_id)
-        res.status(200).json({message: 'Product Rejected'})
+        res.status(200).json({message: 'Order Rejected'})
     } catch (error) {
         res.status(400).send(error.message)
     }
