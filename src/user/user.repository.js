@@ -62,7 +62,7 @@ async function deleteUser(user_id) {
         where: {
             user_id: parseInt(user_id)
         }
-    })
+    }) 
 }
 
 

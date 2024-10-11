@@ -106,6 +106,6 @@ async function updateProductQuantity(product_id, newQuantity) {
         }
     })
 }
-
+ 
 
 module.exports = {insertProduct, findProducts, findProductById, editProduct, deleteProduct, updateProductQuantity, findQuantityById}
