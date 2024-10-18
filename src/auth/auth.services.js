@@ -3,7 +3,7 @@ let jwt = require('jsonwebtoken')
 let userRepository = require('./auth.repository')
 
 function generateToken(user){
-    return jwt.sign({userId: user.id, username: user.username, email: user.email, role: user.role}, process.env.JWT_SECRET, {expiresIn: '1h'})
+    return jwt.sign({userId: user.user_id, username: user.username, email: user.email, role: user.role}, process.env.JWT_SECRET, {expiresIn: '1h'})
 }
 
 async function register(username, email, password) {

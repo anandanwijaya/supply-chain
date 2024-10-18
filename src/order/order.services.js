@@ -42,7 +42,7 @@ async function verifyOrder(order_id, status) {
         }
 
         await productRepository.updateProductQuantity(quantity.product_id, newQuantity)
-    }
+    } 
 }
 
 async function rejectOrder(order_id) {
@@ -51,15 +51,11 @@ async function rejectOrder(order_id) {
     if(!order){
         throw new Error('Order not found')
     }
-    if(order.status !== 'ON_PROCESS'){
-        throw new Error('Cannot reject order. Order status is not On Process')
+    if(order.status !== 'PENDING'){
+        throw new Error('Cannot reject order. Order status is not Pending')
     }
 
     await orderRepository.updateOrderStatus(order_id, 'REJECT', 'updated_at')
-
-    let quantity = await productRepository.findQuantityById(order.product_id)
-    let newQuantity = quantity.quantity_of_product + order.quantity
-    await productRepository.updateProductQuantity(quantity.product_id, newQuantity)
 }
 
 

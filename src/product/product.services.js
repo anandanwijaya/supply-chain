@@ -1,8 +1,8 @@
-let { insertProduct, findProducts, findProductById, editProduct, deleteProduct } = require('./product.repository')
+let { insertProduct, findProducts, findProductById, findProductByUserId, editProduct, deleteProduct } = require('./product.repository')
 
-async function createProduct(newProductData) {
+async function createProduct(newProductData, user_id) {
     
-    let newProduct = await insertProduct(newProductData)
+    let newProduct = await insertProduct(newProductData, user_id)
     return newProduct
 }
 
@@ -21,6 +21,15 @@ async function getProductById(product_id) {
     return product
 }
 
+async function getProductByUserId(user_id) {
+    
+    let products = await findProductByUserId(user_id)
+    if(!products){
+        throw Error('Product not found')
+    }
+    return products
+}
+
 async function editProductById(product_id, productData) {
 
     await getProductById(product_id)
@@ -33,4 +42,4 @@ async function deleteProductById(product_id) {
     await deleteProduct(product_id)
 }
 
-module.exports = {createProduct, getAllProducts, getProductById, editProductById, deleteProductById}
+module.exports = {createProduct, getAllProducts, getProductById, getProductByUserId, editProductById, deleteProductById}

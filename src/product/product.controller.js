@@ -1,20 +1,23 @@
 let express = require('express')
-let {createProduct, getAllProducts, getProductById, editProductById, deleteProductById} = require('./product.services');
+let {createProduct, getAllProducts, getProductById, getProductByUserId, editProductById, deleteProductById} = require('./product.services')
+let stakeholderAuthorization = require('../middleware/stakeholderAuthorization')
+let authorizeJWT = require('../middleware/authorizeJWT')
 
 let router = express.Router()
 
-router.post('/', async(req, res) => {
+router.post('/', authorizeJWT, async(req, res) => {
 
     try {
+        let user_id = req.user_id
         let newProductData = req.body
-        let newProduct = await createProduct(newProductData)
+        let newProduct = await createProduct(newProductData, user_id)
         res.status(201).json(newProduct)
     } catch (error) {
         res.status(400).send(error.message)
     }
 })
 
-router.get('/', async(req, res) => {
+router.get('/', stakeholderAuthorization, async(req, res) => {
     
     try {
         let products = await getAllProducts()
@@ -24,7 +27,17 @@ router.get('/', async(req, res) => {
     }
 })
 
-router.get('/:id', async(req, res) => {
+router.get('/user', authorizeJWT, async(req, res) => {
+    try {
+        let user_id = req.user_id
+        let products = await getProductByUserId(user_id)
+        res.status(200).send(products)
+    } catch (error) {
+        res.status(400).send(error.message)
+    }
+})
+
+router.get('/:id', authorizeJWT, async(req, res) => {
     try {
         let productId = parseInt(req.params.id)
         let product = await getProductById(productId)
@@ -34,7 +47,7 @@ router.get('/:id', async(req, res) => {
     }
 })
 
-router.put('/:id', async(req, res) => {
+router.put('/:id', authorizeJWT, async(req, res) => {
     try {
         let productId = req.params.id
         let productData = req.body
@@ -45,11 +58,11 @@ router.put('/:id', async(req, res) => {
     }
 })
 
-router.delete('/:id', async(req, res) => {
+router.delete('/:id', authorizeJWT, async(req, res) => {
     try {
         let productId = req.params.id
         await deleteProductById(productId) 
-        res.status(200).json({ message: 'Product Deleted' })
+        res.status(204).json({ message: 'Product Deleted' })
     } catch (error) {
         res.status(400).send(error.message)
     }
