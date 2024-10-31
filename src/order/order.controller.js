@@ -7,8 +7,8 @@ let authorizeJWT = require('../middleware/authorizeJWT')
 router.post('/order', stakeholderAuthorization, async(req, res) => {
 
     try {
-        let {product_id, quantity, category} = req.body
-        let newOrder = await orderServices.createOrder(product_id, quantity, category)
+        let {product_id, quantity} = req.body
+        let newOrder = await orderServices.createOrder(product_id, quantity)
         res.status(201).json(newOrder)
     } catch (error) {
         res.status(400).send(error.message)

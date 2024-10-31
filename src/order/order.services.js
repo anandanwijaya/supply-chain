@@ -2,8 +2,12 @@
 let orderRepository = require('./order.repository')
 let productRepository = require('../product/product.repository')
 
-async function createOrder(product_id, quantity, category) {
-    let newOrder = await orderRepository.createOrder(product_id, quantity, category)
+async function createOrder(product_id, quantity) {
+    let product = await productRepository.findProductById(product_id)
+    if(!product){
+        throw new Error('Product not found')
+    }
+    let newOrder = await orderRepository.createOrder(product_id, product.user_id, quantity, product.category)
     return newOrder 
 }
 
@@ -11,7 +15,7 @@ async function getAllOrders() {
     let orders = await orderRepository.findOrders()
     return orders
 }
-
+ 
 async function getOrdersByUserId(user_id) {
     let orders = await orderRepository.findOrdersByUserId(user_id)
     return orders
@@ -23,7 +27,11 @@ async function getOrdersById(order_id) {
 }
 
 async function updateOrderById(order_id, product_id, quantity) {
-    let order = await orderRepository.updateOrderId(order_id, product_id, quantity)
+    let product = await productRepository.findProductById(product_id)
+    if(!product){
+        throw new Error('Product not found')
+    }
+    let order = await orderRepository.updateOrderId(order_id, product_id, product.user_id, product.category, quantity)
     return order
 }
 
@@ -32,11 +40,10 @@ async function verifyOrder(order_id, status, user_id) {
     if(!order){
         throw new Error('Order not found')
     }
-
-    await orderRepository.updateOrderStatus(order_id, status, status === 'ON_PROCESS' ? 'updated_at' : null, user_id)
-    await orderRepository.updateOrderStatus(order_id, status, status === 'COMPLETED' ? 'updated_at' : null, user_id)
-
+    
     if(status === 'ON_PROCESS'){
+
+        await orderRepository.updateOrderStatus(order_id, status, status === 'ON_PROCESS' ? 'updated_at' : null, user_id)
         let product = await productRepository.findProductById(order.product_id)
         if(!product){
             throw new Error('Product not found')
@@ -46,9 +53,18 @@ async function verifyOrder(order_id, status, user_id) {
         if(newQuantity < 0){
             throw new Error('Insuficient quantity')
         }
+        let productQuantity = await productRepository.updateProductQuantity(quantity.product_id, newQuantity)
+        return productQuantity
 
-        await productRepository.updateProductQuantity(quantity.product_id, newQuantity)
-    } 
+    }else if(status === 'DONE'){
+
+        let order = await orderRepository.findOrderById(order_id)
+        if(order.status !== 'ON_PROCESS'){
+            throw new Error('Cannot completed order. Order status is not ON_PROCESS')
+        }
+        let orderDone = await orderRepository.updateOrderStatus(order_id, status, status === 'DONE' ? 'updated_at' : null, user_id)
+        return orderDone
+    }
 }
 
 async function rejectOrder(order_id) {
