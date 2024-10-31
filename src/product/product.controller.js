@@ -49,9 +49,10 @@ router.get('/:id', authorizeJWT, async(req, res) => {
 
 router.put('/:id', authorizeJWT, async(req, res) => {
     try {
+        let user_id = req.user_id
         let productId = req.params.id
         let productData = req.body
-        let updatedProduct = await editProductById(productId, productData)
+        let updatedProduct = await editProductById(productId, productData, user_id)
         res.send(updatedProduct)
     } catch (error) {
         res.status(400).send(error.message)

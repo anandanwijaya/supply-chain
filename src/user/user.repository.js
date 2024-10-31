@@ -2,11 +2,17 @@ let prisma = require('../db')
 
 async function insertUser(userData) {
 
+    if(userData.role === 'STAKEHOLDER'){
+        userData.category = ''
+    }
+    
     let newUser = await prisma.user.create({
         data: {
             username: userData.username, 
             email: userData.email, 
-            password: userData.password
+            password: userData.password,
+            role: userData.role,
+            category: userData.category
         }
     })
     return newUser
@@ -19,6 +25,7 @@ async function findUsers() {
             username: true,
             email: true,
             role: true,
+            category: true,
             created_at: true
         }
    }) 
@@ -35,6 +42,7 @@ async function findUserByUserId(user_id) {
             username: true,
             email: true,
             role: true,
+            category: true,
             created_at: true
         }
     })
@@ -43,6 +51,11 @@ async function findUserByUserId(user_id) {
 
 
 async function editUser(user_id, userData) {
+
+    if(userData.role === 'STAKEHOLDER'){
+        userData.category = ''
+    }
+    
     let updatedUser = await prisma.user.update({
         where: {
             user_id: parseInt(user_id)
@@ -52,6 +65,7 @@ async function editUser(user_id, userData) {
             email: userData.email,
             password: userData.password,
             role: userData.role,
+            category: userData.category
         }
     })
     return updatedUser

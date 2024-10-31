@@ -9,7 +9,7 @@ async function createUser(newUserData) {
     let newUser = await insertUser(newUserData)
     return newUser
 }
-
+ 
 async function getAllUsers() {
     let users = await findUsers()
     return users

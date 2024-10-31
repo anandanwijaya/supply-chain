@@ -34,7 +34,7 @@ router.get('/:id', async(req, res) => {
 })
 
 router.patch('/:id', async(req, res) => {
-
+ 
     try {
         let userId = parseInt(req.params.id)
         let userData = req.body

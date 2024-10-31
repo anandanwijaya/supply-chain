@@ -30,10 +30,10 @@ async function getProductByUserId(user_id) {
     return products
 }
 
-async function editProductById(product_id, productData) {
+async function editProductById(product_id, productData, user_id) {
 
     await getProductById(product_id)
-    let updatedProduct = await editProduct(product_id, productData)
+    let updatedProduct = await editProduct(product_id, productData, user_id)
     return updatedProduct
 }
 

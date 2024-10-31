@@ -13,6 +13,7 @@ model User {
   email       String  @unique
   password    String
   role        Role     @default(STAKEHOLDER)
+  category    String?
   created_at  DateTime @default(now())
   
   Master_Data Master_Data[]
@@ -28,6 +29,7 @@ model Master_Data {
   product_id    Int          @id @default(autoincrement())
   product_name  String
   price         Int
+  category      String
   user_id       Int
 
   User          User         @relation(fields: [user_id], references: [user_id])
@@ -50,6 +52,7 @@ model Order {
   user_id       Int         
   status        StatusOrder  @default(PENDING)
   quantity      Int
+  category      String
   created_at    DateTime     @default(now())
   updated_at    DateTime?
 
