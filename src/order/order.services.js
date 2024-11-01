@@ -42,18 +42,25 @@ async function verifyOrder(order_id, status, user_id) {
     }
 
     if(order.user_id !== user_id){
-        throw new Error('Failed to verify')
+        throw new Error('You not the supplier at this order')
     }
     
     if(status === 'ON_PROCESS'){
+
+        let order = await orderRepository.findOrderById(order_id)
+        if(order.status !== 'PENDING'){
+            throw new Error('Cannot completed order. Order status is not PENDING')
+        }
 
         await orderRepository.updateOrderStatus(order_id, status, status === 'ON_PROCESS' ? 'updated_at' : null, user_id)
         let product = await productRepository.findProductById(order.product_id)
         if(!product){
             throw new Error('Product not found')
         }
+
         let quantity = await productRepository.findQuantityById(order.product_id)
         let newQuantity = quantity.quantity_of_product - order.quantity
+
         if(newQuantity < 0){
             throw new Error('Insuficient quantity')
         }
