@@ -7,7 +7,7 @@ async function createOrder(product_id, quantity) {
     if(!product){
         throw new Error('Product not found')
     }
-    let newOrder = await orderRepository.createOrder(product_id, product.user_id, quantity, product.category)
+    let newOrder = await orderRepository.createOrder(product_id, product.user_id, quantity, parseInt(quantity)*parseInt(product.price), product.category)
     return newOrder 
 }
 
@@ -31,7 +31,7 @@ async function updateOrderById(order_id, product_id, quantity) {
     if(!product){
         throw new Error('Product not found')
     }
-    let order = await orderRepository.updateOrderId(order_id, product_id, product.user_id, product.category, quantity)
+    let order = await orderRepository.updateOrderId(order_id, product_id, product.user_id, quantity, parseInt(quantity)*parseInt(product.price), product.category)
     return order
 }
 
@@ -39,6 +39,10 @@ async function verifyOrder(order_id, status, user_id) {
     let order = await orderRepository.findOrderById(order_id)
     if(!order){
         throw new Error('Order not found')
+    }
+
+    if(order.user_id !== user_id){
+        throw new Error('Failed to verify')
     }
     
     if(status === 'ON_PROCESS'){

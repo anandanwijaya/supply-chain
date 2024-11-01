@@ -1,23 +1,14 @@
 let prisma = require('../db')
 
-async function createOrder(product_id, quantity, category) {
+async function createOrder(product_id, user_id, quantity, total, category) {
 
     try {
-        let productCategory = await prisma.master_Data.findUnique({
-            where: {
-                product_id: parseInt(product_id)
-            }
-        })
-
-        if(productCategory.category !== category){
-            throw new Error('Invalid Category')
-        }
-
         let newOrder = await prisma.order.create({
             data: {
                 product_id: parseInt(product_id),
-                user_id: parseInt(productCategory.user_id),
+                user_id: parseInt(user_id),
                 quantity,
+                total,
                 category,
                 status: "PENDING"
             }
@@ -78,28 +69,19 @@ async function findOrderById(order_id) {
     return order  
 }
 
-async function updateOrderId(order_id, product_id, quantity) {
+async function updateOrderId(order_id, product_id, user_id, quantity, total, category) {
 
-    try {
-        let product = await prisma.master_Data.findUnique({
-            where: {
-                product_id: parseInt(product_id)
-            }
-        })
-
-        if(!product){
-            throw new Error('Product not found')
-        }    
-
+    try { 
         let order = await prisma.order.update({
             where: {
                 order_id: parseInt(order_id)
             },
             data: {
                 product_id: parseInt(product_id),
-                user_id: parseInt(product.user_id),
+                user_id: parseInt(user_id),
                 quantity,
-                category: product.category,
+                total,
+                category,
                 status: "PENDING"
             }
         })
@@ -113,16 +95,6 @@ async function updateOrderStatus(order_id, status, timeStampField, user_id) {
     
     try {
         let updateData = {status}
-        let order = await prisma.order.findUnique({
-            where: {
-                order_id: parseInt(order_id)
-            }
-        })
-
-        if(order.user_id !== user_id){
-            throw new Error('Failed to verify')
-        }
-
         if(timeStampField){
             updateData[timeStampField] = new Date()
         }
