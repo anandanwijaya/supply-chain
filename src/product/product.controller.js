@@ -1,11 +1,11 @@
 let express = require('express')
 let {createProduct, getAllProducts, getProductById, getProductByUserId, editProductById, deleteProductById} = require('./product.services')
 let stakeholderAuthorization = require('../middleware/stakeholderAuthorization')
-let authorizeJWT = require('../middleware/authorizeJWT')
+let supplierAuthorization = require('../middleware/supplierAuthorization')
 
 let router = express.Router()
 
-router.post('/', authorizeJWT, async(req, res) => {
+router.post('/', supplierAuthorization, async(req, res) => {
 
     try {
         let user_id = req.user_id
@@ -27,7 +27,7 @@ router.get('/', stakeholderAuthorization, async(req, res) => {
     }
 })
 
-router.get('/user', authorizeJWT, async(req, res) => {
+router.get('/user', supplierAuthorization, async(req, res) => {
     try {
         let user_id = req.user_id
         let products = await getProductByUserId(user_id)
@@ -37,17 +37,18 @@ router.get('/user', authorizeJWT, async(req, res) => {
     }
 })
 
-router.get('/:id', authorizeJWT, async(req, res) => {
+router.get('/:id', supplierAuthorization, async(req, res) => {
     try {
+        let user_id = req.user_id
         let productId = parseInt(req.params.id)
-        let product = await getProductById(productId)
+        let product = await getProductById(productId, user_id)
         res.status(200).send(product)
     } catch (error) {
         res.status(400).send(error.message)
     }
 })
 
-router.put('/:id', authorizeJWT, async(req, res) => {
+router.put('/:id', supplierAuthorization, async(req, res) => {
     try {
         let user_id = req.user_id
         let productId = req.params.id
@@ -59,10 +60,11 @@ router.put('/:id', authorizeJWT, async(req, res) => {
     }
 })
 
-router.delete('/:id', authorizeJWT, async(req, res) => {
+router.delete('/:id', supplierAuthorization, async(req, res) => {
     try {
+        let user_id = req.user_id
         let productId = req.params.id
-        await deleteProductById(productId) 
+        await deleteProductById(productId, user_id) 
         res.status(204).json({ message: 'Product Deleted' })
     } catch (error) {
         res.status(400).send(error.message)

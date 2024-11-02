@@ -40,11 +40,11 @@ async function findProducts() {
     return products
 }
 
-async function findProductById(product_id) {
+async function findProductByUserId(user_id) {
     
-    let products = await prisma.master_Data.findUnique({
+    let products = await prisma.master_Data.findMany({
         where: {
-            product_id: parseInt(product_id)
+            user_id: parseInt(user_id)
         },
         include: {
             Quantity: {
@@ -57,11 +57,11 @@ async function findProductById(product_id) {
     return products
 }
 
-async function findProductByUserId(user_id) {
+async function findProductById(product_id) {
     
-    let products = await prisma.master_Data.findMany({
+    let products = await prisma.master_Data.findUnique({
         where: {
-            user_id: parseInt(user_id)
+            product_id: parseInt(product_id)
         },
         include: {
             Quantity: {
@@ -120,7 +120,7 @@ async function deleteProduct(product_id) {
 }
 
 async function findQuantityById(product_id) {
-    let quantity =  await prisma.quantity.findUnique({
+    let quantity = await prisma.quantity.findUnique({
         where: {
             product_id: parseInt(product_id)
         }

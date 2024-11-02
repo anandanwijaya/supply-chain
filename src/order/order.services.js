@@ -14,8 +14,8 @@ async function createOrder(product_id, quantity) {
 async function getAllOrders() {
     let orders = await orderRepository.findOrders()
     return orders
-}
- 
+} 
+
 async function getOrdersByUserId(user_id) {
     let orders = await orderRepository.findOrdersByUserId(user_id)
     return orders
@@ -42,7 +42,7 @@ async function verifyOrder(order_id, status, user_id) {
     }
 
     if(order.user_id !== user_id){
-        throw new Error('You not the supplier at this order')
+        throw new Error('Invalid supplier')
     }
     
     if(status === 'ON_PROCESS'){
@@ -78,11 +78,14 @@ async function verifyOrder(order_id, status, user_id) {
     }
 }
 
-async function rejectOrder(order_id) {
+async function rejectOrder(order_id, user_id) {
     let order = await orderRepository.findOrderById(order_id)
 
     if(!order){
         throw new Error('Order not found')
+    }
+    if(order.user_id !== user_id){
+        throw new Error('Invalid supplier')
     }
     if(order.status !== 'PENDING'){
         throw new Error('Cannot reject order. Order status is not Pending')

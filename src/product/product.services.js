@@ -12,15 +12,6 @@ async function getAllProducts() {
     return products
 }
 
-async function getProductById(product_id) {
-
-    let product = await findProductById(product_id)
-    if (!product) {
-        throw Error('Product not found')
-    }
-    return product
-}
-
 async function getProductByUserId(user_id) {
     
     let products = await findProductByUserId(user_id)
@@ -30,15 +21,28 @@ async function getProductByUserId(user_id) {
     return products
 }
 
+async function getProductById(product_id, user_id) {
+
+    let product = await findProductById(product_id)
+    if (!product) {
+        throw Error('Product not found')
+    }
+    
+    if(product.user_id !== user_id){
+        throw new Error('Invalid supplier')
+    }
+    return product 
+}
+
 async function editProductById(product_id, productData, user_id) {
 
-    await getProductById(product_id)
+    await getProductById(product_id, user_id)
     let updatedProduct = await editProduct(product_id, productData, user_id)
     return updatedProduct
 }
 
-async function deleteProductById(product_id) {
-    await getProductById(product_id)
+async function deleteProductById(product_id, user_id) {
+    await getProductById(product_id, user_id)
     await deleteProduct(product_id)
 }
 

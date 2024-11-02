@@ -2,7 +2,7 @@ let express = require('express')
 let router = express.Router()
 let orderServices = require('./order.services')
 let stakeholderAuthorization = require('../middleware/stakeholderAuthorization')
-let authorizeJWT = require('../middleware/authorizeJWT')
+let supplierAuthorization = require('../middleware/supplierAuthorization')
 
 router.post('/order', stakeholderAuthorization, async(req, res) => {
 
@@ -25,7 +25,7 @@ router.get('/', stakeholderAuthorization, async(req, res) => {
     }
 })
 
-router.get('/user', authorizeJWT, async(req, res) => {
+router.get('/user', supplierAuthorization, async(req, res) => {
 
     try {
         let user_id = req.user_id
@@ -48,7 +48,7 @@ router.patch('/updateorder/:order_id', stakeholderAuthorization, async(req, res)
     }
 })
 
-router.patch('/verify/:order_id', authorizeJWT, async(req, res) => {
+router.patch('/verify/:order_id', supplierAuthorization, async(req, res) => {
 
     try {
         let {order_id} = req.params
@@ -61,11 +61,12 @@ router.patch('/verify/:order_id', authorizeJWT, async(req, res) => {
     }
 })
 
-router.post('/reject/:order_id', authorizeJWT, async(req, res) => {
+router.post('/reject/:order_id', supplierAuthorization, async(req, res) => {
 
     try {
         let {order_id} = req.params
-        await orderServices.rejectOrder(order_id)
+        let user_id = req.user_id
+        await orderServices.rejectOrder(order_id, user_id)
         res.status(200).json({message: 'Order Rejected'})
     } catch (error) {
         res.status(400).send(error.message)
