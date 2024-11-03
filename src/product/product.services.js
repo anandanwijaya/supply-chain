@@ -1,8 +1,10 @@
 let { insertProduct, findProducts, findProductById, findProductByUserId, editProduct, deleteProduct } = require('./product.repository')
+let { findUserByUserId } = require('../user/user.repository')
 
 async function createProduct(newProductData, user_id) {
     
-    let newProduct = await insertProduct(newProductData, user_id)
+    let user = await findUserByUserId(user_id)
+    let newProduct = await insertProduct(newProductData, user.category, user_id)
     return newProduct
 }
 
@@ -37,7 +39,8 @@ async function getProductById(product_id, user_id) {
 async function editProductById(product_id, productData, user_id) {
 
     await getProductById(product_id, user_id)
-    let updatedProduct = await editProduct(product_id, productData, user_id)
+    let user = await findUserByUserId(user_id)
+    let updatedProduct = await editProduct(product_id, productData, user.category, user_id)
     return updatedProduct
 }
 

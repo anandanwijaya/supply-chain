@@ -1,18 +1,12 @@
 let prisma = require('../db')
 
-async function insertProduct(productData, user_id) {
-
-    let userCategory = await prisma.user.findUnique({
-        where: {
-            user_id: parseInt(user_id)
-        }
-    })
+async function insertProduct(productData, category, user_id) {
 
     let newProduct = await prisma.master_Data.create({
         data: {
             product_name: productData.product_name,
             price: productData.price,
-            category: userCategory.category,
+            category: category,
             user_id: parseInt(user_id)
         }
     })
@@ -74,13 +68,7 @@ async function findProductById(product_id) {
     return products
 }
 
-async function editProduct(product_id, productData, user_id) {
-    
-    let userCategory = await prisma.user.findUnique({
-        where: {
-            user_id: parseInt(user_id)
-        }
-    })
+async function editProduct(product_id, productData, category, user_id) {
 
     let updatedProduct = await prisma.master_Data.update({
         where: {
@@ -89,7 +77,7 @@ async function editProduct(product_id, productData, user_id) {
         data: {
             product_name: productData.product_name,
             price: productData.price,
-            category: userCategory.category,
+            category,
             user_id: parseInt(user_id)
         }
     })

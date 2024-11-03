@@ -73,4 +73,15 @@ router.post('/reject/:order_id', supplierAuthorization, async(req, res) => {
     }
 })
 
+router.get('/label/:label_id', supplierAuthorization, async(req, res) => {
+    
+    try {
+        let {label_id} = req.params
+        let label = await orderServices.getLabelById(label_id)
+        res.status(200).send(label)
+    } catch (error) {
+        res.status(500).send(error.message)
+    }
+})
+
 module.exports = router

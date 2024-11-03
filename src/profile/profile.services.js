@@ -6,9 +6,6 @@ async function getProfileByUserId(user_id) {
     if(!user){
         throw Error('User not found')
     }
-    if(user.user_id !== user_id){
-        throw Error('Invalid User')
-    }
     return user
 }
 
