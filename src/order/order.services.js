@@ -21,8 +21,11 @@ async function getOrdersByUserId(user_id) {
     return orders
 }
 
-async function getOrdersById(order_id) {
+async function getOrdersById(order_id, user_id) {
     let order = await orderRepository.findOrderById(order_id)
+    if(order.user_id !== user_id){
+        throw new Error('Invalid supplier')
+    }
     return order
 }
 
