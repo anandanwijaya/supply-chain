@@ -11,7 +11,11 @@ async function createUser(userData) {
 }
 
 async function findUserByUsername(username) {
-    return prisma.user.findUnique({ where: { username } })
+    try {
+        return prisma.user.findUnique({ where: { username } })
+    } catch (error) {
+        throw new Error('Failed to find user')
+    }
 }
 
 module.exports = {createUser, findUserByUsername}

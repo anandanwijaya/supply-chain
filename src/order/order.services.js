@@ -76,6 +76,8 @@ async function verifyOrder(order_id, status, user_id) {
         }
         let orderDone = await orderRepository.updateOrderStatus(order_id, status, status === 'DONE' ? 'updated_at' : null, user_id)
         return orderDone
+    }else{
+        throw new Error('Order update failed')
     }
 }
 

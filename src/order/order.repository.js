@@ -62,12 +62,16 @@ async function findOrdersByUserId(user_id) {
 
 async function findOrderById(order_id) {
   
-    let order = await prisma.order.findUnique({
-        where: {
-            order_id: parseInt(order_id)
-        }
-    })
-    return order  
+    try {
+        let order = await prisma.order.findUnique({
+            where: {
+                order_id: parseInt(order_id)
+            }
+        })
+        return order
+    } catch (error) {
+        throw new Error('Failed to fetch order by Id')
+    }
 }
 
 async function updateOrderId(order_id, product_id, user_id, quantity, total, category) {
