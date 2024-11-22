@@ -11,6 +11,7 @@ let userController = require('./user/user.controller')
 let orderController = require('./order/order.controller')
 let profileController = require('./profile/profile.controller')
 let dashboardController = require('./dashboard/dashboard.controller');
+let labelController = require('./label/label.controller');
 let stakeholderAuthorization = require('./middleware/stakeholderAuthorization')
 
 app.use(express.json())
@@ -21,6 +22,7 @@ app.use('/api/users', stakeholderAuthorization, userController)
 app.use('/api/orders', orderController)
 app.use('/api/profile', profileController)
 app.use('/api/dashboard', dashboardController)
+app.use('/api/label', labelController)
 
 app.get("/", (req, res) => {
     res.send("Hello World!")

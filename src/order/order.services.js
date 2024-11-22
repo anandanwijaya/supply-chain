@@ -1,6 +1,7 @@
 // let { item } = require('../db')
 let orderRepository = require('./order.repository')
 let productRepository = require('../product/product.repository')
+let labelRepository = require('../label/label.repository')
 
 async function createOrder(product_id, quantity) {
     let product = await productRepository.findProductById(product_id)
@@ -57,7 +58,7 @@ async function verifyOrder(order_id, status, user_id) {
         
         let product = await productRepository.findProductById(order.product_id)
         await orderRepository.updateOrderStatus(order_id, status, status === 'ON_PROCESS' ? 'updated_at' : null, user_id)
-        await orderRepository.createLabel(order, product)
+        await labelRepository.createLabel(order, product)
 
         let quantity = await productRepository.findQuantityById(order.product_id)
         let newQuantity = quantity.quantity_of_product - order.quantity
@@ -97,10 +98,5 @@ async function rejectOrder(order_id, user_id) {
     await orderRepository.updateOrderStatus(order_id, 'REJECT', 'updated_at')
 }
 
-async function getLabelById(label_id) {
-    let label = orderRepository.findLabelById(label_id)
-    return label
-}
 
-
-module.exports = {createOrder, getAllOrders, getOrdersByUserId, getOrdersById, updateOrderById, verifyOrder, rejectOrder, getLabelById}
+module.exports = {createOrder, getAllOrders, getOrdersByUserId, getOrdersById, updateOrderById, verifyOrder, rejectOrder}

@@ -2,9 +2,13 @@ let jwt = require('jsonwebtoken')
  
 let stakeholderAuthorization = (req, res, next) => {
     
-    let token = req.headers.authorization
-    if(!token){
-        return res.status(401).json({message: 'Tidak Ada Token, Gagal Mengakses Fitur'})
+    if (!authHeader) {
+        return res.status(401).json({ message: 'Tidak Ada Token, Gagal Mengakses Fitur' })
+    }
+
+    let token = authHeader.split(' ')[1]
+    if (!token) {
+        return res.status(401).json({ message: 'Format Token Salah, Gagal Mengakses Fitur' })
     }
 
     try {

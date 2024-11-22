@@ -3,7 +3,7 @@ let router = express.Router()
 let orderServices = require('./order.services')
 let stakeholderAuthorization = require('../middleware/stakeholderAuthorization')
 let supplierAuthorization = require('../middleware/supplierAuthorization')
-let allUserAuthorization = require('../middleware/allUserAuthorization')
+
 
 router.post('/order', stakeholderAuthorization, async(req, res) => {
 
@@ -86,15 +86,5 @@ router.post('/reject/:order_id', supplierAuthorization, async(req, res) => {
     }
 })
 
-router.get('/label/:label_id', supplierAuthorization, async(req, res) => {
-    
-    try {
-        let {label_id} = req.params
-        let label = await orderServices.getLabelById(label_id)
-        res.status(200).send(label)
-    } catch (error) {
-        res.status(500).send(error.message)
-    }
-})
 
 module.exports = router
