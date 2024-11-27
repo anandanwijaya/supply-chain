@@ -14,7 +14,7 @@ router.post("/order", stakeholderAuthorization, async (req, res) => {
   }
 })
 
-router.get("/", async (req, res) => {
+router.get("/", stakeholderAuthorization, async (req, res) => {
   try {
     let orders = await orderServices.getAllOrders()
     res.send(orders)
