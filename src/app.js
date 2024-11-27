@@ -3,7 +3,7 @@ let app = express()
 let cors = require('cors')
 let dotenv = require('dotenv')
 dotenv.config()
-let port = process.env.PORT
+// let port = process.env.PORT
 
 let authController = require('./auth/auth.controller')
 let productController = require('./product/product.controller')
@@ -26,6 +26,8 @@ app.get("/", (req, res) => {
     res.send("Hello World!")
 })
 
-app.listen(port, () => {
-    console.log(`Example app listening on port http://localhost:${port}`)
-})
+// app.listen(port, () => {
+//     console.log(`Example app listening on port http://localhost:${port}`)
+// })
+
+export default app
