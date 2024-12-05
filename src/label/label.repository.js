@@ -2,7 +2,7 @@ let prisma = require("../db");
 let QRCode = require("qrcode");
 
 async function createLabel(order, product) {
-  let qrCode = await QRCode.toString(`http://localhost:3000/orders/order/${order.order_id}`);
+  let qrCode = await QRCode.toString(`https://supply-chain-frontend-seven.vercel.app/supplier/order/${order.order_id}`);
   try {
     await prisma.label.create({
       data: {
