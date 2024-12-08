@@ -1,9 +1,9 @@
 let express = require("express");
 let router = express.Router();
-let allUserAuthorization = require("../middleware/allUserAuthorization");
+let supplierAuthorization = require("../middleware/supplierAuthorization");
 let labelServices = require("./label.services");
 
-router.get("/:id", allUserAuthorization, async (req, res) => {
+router.get("/:id", supplierAuthorization, async (req, res) => {
   try {
     let { id } = req.params;
     let label = await labelServices.getLabelById(id);
