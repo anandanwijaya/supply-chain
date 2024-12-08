@@ -52,7 +52,7 @@ model Order {
   user_id       Int         
   status        StatusOrder  @default(PENDING)
   quantity      Int
-  total         Decimal
+  total         Int
   category      String
   created_at    DateTime     @default(now())
   updated_at    DateTime?
