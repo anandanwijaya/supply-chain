@@ -1,27 +1,30 @@
-let jwt = require('jsonwebtoken')
- 
-let supplierAuthorization = (req, res, next) => {
-    
-    let authHeader = req.headers.authorization
+const jwt = require('jsonwebtoken')
+
+const supplierAuthorization = (req, res, next) => {
+    const authHeader = req.headers.authorization
     if (!authHeader) {
-        return res.status(401).json({ message: 'Tidak Ada Token, Gagal Mengakses Fitur' })
+        return res
+            .status(401)
+            .json({ message: 'Tidak Ada Token, Gagal Mengakses Fitur' })
     }
 
-    let token = authHeader.split(' ')[1]
+    const token = authHeader.split(' ')[1]
     if (!token) {
-        return res.status(401).json({ message: 'Format Token Salah, Gagal Mengakses Fitur' })
+        return res
+            .status(401)
+            .json({ message: 'Format Token Salah, Gagal Mengakses Fitur' })
     }
 
     try {
-        let decoded = jwt.verify(token, process.env.JWT_SECRET)
-        
-        if(decoded.role !== 'SUPPLIER'){
-            return res.status(403).json({message: 'Unauthorized'})
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+
+        if (decoded.role !== 'SUPPLIER') {
+            return res.status(403).json({ message: 'Unauthorized' })
         }
         req.user_id = decoded.userId
         next()
     } catch (error) {
-        return res.status(403).json({message: 'Gagal mengautentikasi token!'})
+        return res.status(403).json({ message: 'Gagal mengautentikasi token!' })
     }
 }
 

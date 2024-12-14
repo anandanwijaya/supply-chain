@@ -1,11 +1,10 @@
-let prisma = require('../db')
+const prisma = require('../db')
 
 async function findProfileByUserId(user_id) {
-
     try {
-        let user = await prisma.user.findUnique({
+        const user = await prisma.user.findUnique({
             where: {
-                user_id: parseInt(user_id)
+                user_id: parseInt(user_id),
             },
             select: {
                 user_id: true,
@@ -13,15 +12,14 @@ async function findProfileByUserId(user_id) {
                 email: true,
                 role: true,
                 category: true,
-                created_at: true
-            }
+                created_at: true,
+            },
         })
-        
+
         return user
     } catch (error) {
         throw new Error('Failed to find profile')
     }
 }
 
-
-module.exports = {findProfileByUserId}
+module.exports = { findProfileByUserId }

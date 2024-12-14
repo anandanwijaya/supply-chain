@@ -1,9 +1,8 @@
-let prisma = require('../db')
+const prisma = require('../db')
 
 async function createUser(userData) {
-    
     try {
-        let newUser = await prisma.user.create({ data: userData })
+        const newUser = await prisma.user.create({ data: userData })
         return newUser
     } catch (error) {
         throw new Error('Failed to create user in repository')
@@ -18,4 +17,4 @@ async function findUserByUsername(username) {
     }
 }
 
-module.exports = {createUser, findUserByUsername}
+module.exports = { createUser, findUserByUsername }

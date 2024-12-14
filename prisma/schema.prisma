@@ -18,6 +18,7 @@ model User {
   
   Master_Data Master_Data[]
   Orders      Order[]
+  Label Label[]
 }
 
 enum Role {
@@ -35,6 +36,7 @@ model Master_Data {
   User          User         @relation(fields: [user_id], references: [user_id])
   Quantity Quantity[]
   Order Order[]
+  Label Label[]
 }
 
 model Quantity {
@@ -70,10 +72,15 @@ enum StatusOrder {
 }
 
 model Label {
-  label_id    Int     @id @default(autoincrement())
-  order_id    Int
-  description String
-  qr_code     String
+  label_id      Int           @id @default(autoincrement())
+  order_id      Int
+  user_id       Int
+  product_id    Int
+  created_at    DateTime      @default(now())
+  description   String
+  qr_code       String
 
-  Order      Order @relation(fields: [order_id], references: [order_id])
+  User          User          @relation(fields: [user_id], references: [user_id])
+  Master_Data   Master_Data   @relation(fields: [product_id], references: [product_id])
+  Order         Order         @relation(fields: [order_id], references: [order_id])
 }
