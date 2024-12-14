@@ -20,6 +20,24 @@ async function createLabel(order, product) {
     }
 }
 
+async function findLabelByUserId(user_id) {
+    try {
+        const labels = await prisma.label.findMany({
+            where: {
+                user_id: parseInt(user_id),
+            },
+            include: {
+                User: true,
+                Master_Data: true,
+                Order: true,
+            },
+        })
+        return labels
+    } catch (error) {
+        throw new Error('Failed to create label')
+    }
+}
+
 async function findLabelById(label_id) {
     try {
         const label = await prisma.label.findUnique({
@@ -37,4 +55,5 @@ async function findLabelById(label_id) {
         throw new Error('Failed to create label')
     }
 }
-module.exports = { createLabel, findLabelById }
+
+module.exports = { createLabel, findLabelByUserId, findLabelById }
