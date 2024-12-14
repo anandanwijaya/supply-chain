@@ -44,20 +44,16 @@ router.get('/user', supplierAuthorization, async (req, res) => {
     }
 })
 
-router.patch(
-    '/updateorder/:order_id',
-    stakeholderAuthorization,
-    async (req, res) => {
-        try {
-            const { order_id } = req.params
-            const { product_id, quantity } = req.body
-            await orderServices.updateOrderById(order_id, product_id, quantity)
-            res.status(200).json({ message: 'Order update successfully' })
-        } catch (error) {
-            res.status(400).send(error.message)
-        }
-    }
-)
+router.patch('/updateorder/:order_id', stakeholderAuthorization, async (req, res) => {
+    try {
+        const { order_id } = req.params
+        const { product_id, quantity } = req.body
+        await orderServices.updateOrderById(order_id, product_id, quantity)
+        res.status(200).json({ message: 'Order update successfully' })
+    } catch (error) {
+        res.status(400).send(error.message)
+    }   
+})
 
 router.patch('/verify/:order_id', supplierAuthorization, async (req, res) => {
     try {
