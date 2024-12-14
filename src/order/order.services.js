@@ -69,6 +69,15 @@ async function verifyOrder(order_id, status, user_id) {
             )
         }
 
+        const quantity = await productRepository.findQuantityById(
+            order.product_id
+        )
+        const newQuantity = quantity.quantity_of_product - order.quantity
+
+        if (newQuantity < 0) {
+            throw new Error('Insuficient quantity')
+        }
+
         const product = await productRepository.findProductById(
             order.product_id
         )
@@ -79,15 +88,6 @@ async function verifyOrder(order_id, status, user_id) {
             user_id
         )
         await labelRepository.createLabel(order, product)
-
-        const quantity = await productRepository.findQuantityById(
-            order.product_id
-        )
-        const newQuantity = quantity.quantity_of_product - order.quantity
-
-        if (newQuantity < 0) {
-            throw new Error('Insuficient quantity')
-        }
 
         const productQuantity = await productRepository.updateProductQuantity(
             quantity.product_id,
