@@ -6,7 +6,7 @@ async function createLabel(order, product) {
         `https://supply-chain-frontend-seven.vercel.app/supplier/order/${order.order_id}`
     )
     try {
-        await prisma.label.create({
+        const label = await prisma.label.create({
             data: {
                 order_id: parseInt(order.order_id),
                 user_id: parseInt(order.user_id),
@@ -15,6 +15,7 @@ async function createLabel(order, product) {
                 qr_code: qrCode,
             },
         })
+        return label
     } catch (error) {
         throw new Error('Failed to create label')
     }
@@ -32,6 +33,9 @@ async function findLabelByUserId(user_id) {
                 Order: true,
             },
         })
+
+        labels.map(async(label) => label.qr_code == await QRCode.toString(`https://supply-chain-frontend-seven.vercel.app/supplier/order/${labels.Order.order_id}`))
+
         return labels
     } catch (error) {
         throw new Error('Failed to create label')
