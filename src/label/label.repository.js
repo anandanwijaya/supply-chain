@@ -34,7 +34,13 @@ async function findLabelByUserId(user_id) {
             },
         })
 
-        labels.map(async(label) => label.qr_code == await QRCode.toString(`https://supply-chain-frontend-seven.vercel.app/supplier/order/${labels.Order.order_id}`))
+        for (const label of labels) {
+            if (label.Order) {
+                label.qr_code = await QRCode.toString(
+                    `https://supply-chain-frontend-seven.vercel.app/supplier/order/${label.Order.order_id}`
+                )
+            }
+        }
 
         return labels
     } catch (error) {
