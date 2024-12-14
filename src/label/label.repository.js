@@ -42,7 +42,7 @@ async function findLabelByUserId(user_id) {
             }
         }
 
-        return labels
+        return label
     } catch (error) {
         throw new Error('Failed to create label')
     }
