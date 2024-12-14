@@ -5,7 +5,7 @@ const labelServices = require('./label.services')
 
 router.get('/', supplierAuthorization, async (req, res) => {
     try {
-        const { id } = req.user_id
+        const { id } = req.params
         const labels = await labelServices.getLabelByUserId(id)
         res.status(200).send(labels)
     } catch (error) {
