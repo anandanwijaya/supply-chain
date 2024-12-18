@@ -79,6 +79,7 @@ async function updateOrderId(order_id, product_id, user_id, quantity, total, cat
                 total,
                 category,
                 status: 'PENDING',
+                created_at: new Date()
             },
         })
         return order
