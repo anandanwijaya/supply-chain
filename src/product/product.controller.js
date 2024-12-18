@@ -63,7 +63,7 @@ router.put('/:id', supplierAuthorization, async (req, res) => {
             productData,
             user_id
         )
-        res.send(updatedProduct)
+        res.status(200).send(updatedProduct)
     } catch (error) {
         res.status(400).send(error.message)
     }
