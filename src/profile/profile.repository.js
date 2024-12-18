@@ -22,29 +22,4 @@ async function findProfileByUserId(user_id) {
     }
 }
 
-async function updateProfile(userData) {
-    try {
-        if (userData.role === 'STAKEHOLDER') {
-            userData.category = ''
-        }
-
-        const updatedUser = await prisma.user.update({
-            where: {
-                user_id: parseInt(user_id),
-            },
-            data: {
-                username: userData.username,
-                email: userData.email,
-                password: userData.password,
-                role: userData.role.toUpperCase(),
-                category: userData.category.toUpperCase(),
-            },
-        })
-
-        return updatedUser
-    } catch (error) {
-        throw new Error('Failed to edit user')
-    }
-}
-
-module.exports = { findProfileByUserId, updateProfile }
+module.exports = { findProfileByUserId }
