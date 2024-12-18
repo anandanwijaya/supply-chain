@@ -31,7 +31,7 @@ async function updateProfile(userData) {
 
         const updatedUser = await prisma.user.update({
             where: {
-                user_id: parseInt(user_id),
+                user_id: parseInt(userData.user_id),
             },
             data: {
                 username: userData.username,
