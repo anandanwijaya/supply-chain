@@ -7,7 +7,7 @@ router.get('/', allUserAuthorization, async (req, res) => {
     try {
         const user_id = parseInt(req.user_id)
         const user = await profileService.getProfileByUserId(user_id)
-        res.send(user)
+        res.status(200).send(user)
     } catch (error) {
         res.status(400).send(error.message)
     }

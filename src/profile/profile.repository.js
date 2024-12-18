@@ -10,6 +10,7 @@ async function findProfileByUserId(user_id) {
                 user_id: true,
                 username: true,
                 email: true,
+                password: true,
                 role: true,
                 category: true,
                 created_at: true,
