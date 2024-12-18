@@ -13,4 +13,20 @@ router.get('/', allUserAuthorization, async (req, res) => {
     }
 })
 
+router.patch('/', async (req, res) => {
+    try {
+        const user_id = parseInt(req.user_id)
+        const userData = req.body
+        const updatedUser = await userService.editProfile(user_id, userData)
+
+        delete updatedUser.password
+        res.status(200).send({
+            data: updatedUser,
+            message: 'Your profile succesfully updated!',
+        })
+    } catch (error) {
+        res.status(400).send(error.message)
+    }
+})
+
 module.exports = router
