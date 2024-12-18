@@ -14,7 +14,7 @@ async function editProfile(user_id, userData) {
         const hashedPassword = await bcrypt.hash(userData.password, 10)
         userData.password = hashedPassword
     }
-    const user = await editUser(user_id, userData)
+    const user = await updateProfile(user_id, userData)
     return user
 }
 
