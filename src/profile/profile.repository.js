@@ -23,7 +23,7 @@ async function findProfileByUserId(user_id) {
     }
 }
 
-async function updateProfile(userData) {
+async function updateProfile(user_id, userData) {
     try {
         if (userData.role === 'STAKEHOLDER') {
             userData.category = ''
@@ -31,7 +31,7 @@ async function updateProfile(userData) {
 
         const updatedUser = await prisma.user.update({
             where: {
-                user_id: parseInt(userData.user_id),
+                user_id: parseInt(user_id),
             },
             data: {
                 username: userData.username,
