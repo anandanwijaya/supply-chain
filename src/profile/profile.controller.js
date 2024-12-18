@@ -13,7 +13,7 @@ router.get('/', allUserAuthorization, async (req, res) => {
     }
 })
 
-router.patch('/', async (req, res) => {
+router.patch('/', allUserAuthorization, async (req, res) => {
     try {
         const user_id = parseInt(req.user_id)
         const userData = req.body
