@@ -17,7 +17,6 @@ const productController = require('./product/product.controller')
 const userController = require('./user/user.controller')
 const orderController = require('./order/order.controller')
 const profileController = require('./profile/profile.controller')
-const dashboardController = require('./dashboard/dashboard.controller')
 const labelController = require('./label/label.controller')
 
 app.use('/api/auth', authController)
@@ -25,7 +24,6 @@ app.use('/api/products', productController)
 app.use('/api/users', stakeholderAuthorization, userController)
 app.use('/api/orders', orderController)
 app.use('/api/profile', profileController)
-app.use('/api/dashboard', dashboardController)
 app.use('/api/labels', labelController)
 
 export default app

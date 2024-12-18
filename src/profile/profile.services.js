@@ -1,4 +1,5 @@
-const { findProfileByUserId } = require('./profile.repository')
+const bcrypt = require('bcrypt')
+const { findProfileByUserId, updateProfile } = require('./profile.repository')
 
 async function getProfileByUserId(user_id) {
     const user = await findProfileByUserId(user_id)
@@ -8,4 +9,13 @@ async function getProfileByUserId(user_id) {
     return user
 }
 
-module.exports = { getProfileByUserId }
+async function editProfile(user_id, userData) {
+    if (userData.password) {
+        const hashedPassword = await bcrypt.hash(userData.password, 10)
+        userData.password = hashedPassword
+    }
+    const user = await updateProfile(user_id, userData)
+    return user
+}
+
+module.exports = { getProfileByUserId, editProfile }
