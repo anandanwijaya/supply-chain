@@ -15,7 +15,7 @@ router.post('/', async (req, res) => {
 router.get('/', async (req, res) => {
     try {
         const users = await userService.getAllUsers()
-        res.status(200).send(users)
+        res.send(users)
     } catch (error) {
         res.status(500).send(error.message)
     }
@@ -25,7 +25,7 @@ router.get('/:id', async (req, res) => {
     try {
         const userId = parseInt(req.params.id)
         const user = await userService.getUserByUserId(userId)
-        res.status(200).send(user)
+        res.send(user)
     } catch (error) {
         res.status(400).send(error.message)
     }
@@ -51,7 +51,7 @@ router.delete('/:id', async (req, res) => {
     try {
         const userId = parseInt(req.params.id)
         await userService.deleteUserByUserId(userId)
-        res.status(204).json({ message: 'User Deleted' })
+        res.status(200).json({ message: 'User Deleted' })
     } catch (error) {
         res.status(400).send(error.message)
     }

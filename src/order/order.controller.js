@@ -17,7 +17,7 @@ router.post('/order', stakeholderAuthorization, async (req, res) => {
 router.get('/', stakeholderAuthorization, async (req, res) => {
     try {
         const orders = await orderServices.getAllOrders()
-        res.status(200).send(orders)
+        res.send(orders)
     } catch (error) {
         res.status(500).send(error.message)
     }
@@ -28,7 +28,7 @@ router.get('/order/:order_id', supplierAuthorization, async (req, res) => {
         const { order_id } = req.params
         const user_id = req.user_id
         const order = await orderServices.getOrdersById(order_id, user_id)
-        res.status(200).send(order)
+        res.send(order)
     } catch (error) {
         res.status(500).send(error.message)
     }
