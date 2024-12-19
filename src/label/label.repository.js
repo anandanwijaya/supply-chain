@@ -3,7 +3,7 @@ const QRCode = require('qrcode')
 
 async function createLabel(order, product) {
     const qrCode = await QRCode.toString(
-        `https://supply-chain-frontend-seven.vercel.app/supplier/order/${order.order_id}`
+        `https://supply-chain-frontend-seven.vercel.app/supplier/order`
     )
     try {
         const label = await prisma.label.create({
@@ -16,6 +16,26 @@ async function createLabel(order, product) {
             },
         })
         return label
+    } catch (error) {
+        throw new Error('Failed to create label')
+    }
+}
+
+async function findLabels() {
+    try {
+        const labels = await prisma.label.findMany({
+            include: {
+                User: true,
+                Master_Data: true,
+                Order: true,
+            },
+        })
+
+        for (const label of labels) {
+            label.qr_code = await QRCode.toString(`https://supply-chain-frontend-seven.vercel.app/user/order`)
+        }
+
+        return labels
     } catch (error) {
         throw new Error('Failed to create label')
     }
@@ -35,7 +55,7 @@ async function findLabelByUserId(user_id) {
         })
 
         for (const label of labels) {
-            label.qr_code = await QRCode.toString(`https://supply-chain-frontend-seven.vercel.app/supplier/order/${label.Order.order_id}`)
+            label.qr_code = await QRCode.toString(`https://supply-chain-frontend-seven.vercel.app/admin/order`)
         }
 
         return labels
@@ -44,22 +64,5 @@ async function findLabelByUserId(user_id) {
     }
 }
 
-async function findLabelById(label_id) {
-    try {
-        const label = await prisma.label.findUnique({
-            where: {
-                label_id: parseInt(label_id),
-            },
-            include: {
-                User: true,
-                Master_Data: true,
-                Order: true,
-            },
-        })
-        return label
-    } catch (error) {
-        throw new Error('Failed to create label')
-    }
-}
 
-module.exports = { createLabel, findLabelByUserId, findLabelById }
+module.exports = { createLabel, findLabels, findLabelByUserId }
