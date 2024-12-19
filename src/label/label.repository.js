@@ -3,7 +3,7 @@ const QRCode = require('qrcode')
 
 async function createLabel(order, product) {
     const qrCode = await QRCode.toString(
-        `https://supply-chain-frontend-seven.vercel.app/supplier/order`
+        `https://supply-chain-frontend-seven.vercel.app/user/order`
     )
     try {
         const label = await prisma.label.create({
